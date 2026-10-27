@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }} · SpendWise{% endblock %}
+{% block content %}
+<div class="form-page"><a class="back-link" href="{% url 'expense_list' %}">← Back to expenses</a><section class="panel form-panel"><div class="eyebrow">EXPENSE DETAILS</div><h1>{{ page_title }}</h1><p class="muted">Enter the details below. You can update them later.</p>
+<form method="post" class="form-stack">{% csrf_token %}
+  {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}
+  {% for field in form %}<label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<small class="form-error">{{ error }}</small>{% endfor %}{% endfor %}
+  <div class="form-actions"><button class="button primary" type="submit">Save expense</button><a class="button secondary" href="{% url 'expense_list' %}">Cancel</a></div>
+</form></section></div>
+{% endblock %}

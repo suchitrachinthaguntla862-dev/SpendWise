@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Create account · SpendWise{% endblock %}
+{% block content %}
+<section class="auth-wrap">
+  <div class="auth-card">
+    <div class="eyebrow">GET STARTED</div><h1>Make money make sense.</h1>
+    <p class="muted">Create your private expense-tracking account.</p>
+    <form method="post" class="form-stack">{% csrf_token %}
+      {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}
+      {% for field in form %}
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}<small class="help">{{ field.help_text|safe }}</small>{% endif %}
+        {% for error in field.errors %}<small class="form-error">{{ error }}</small>{% endfor %}
+      {% endfor %}
+      <button class="button primary full" type="submit">Create my account</button>
+    </form>
+    <p class="auth-foot">Already registered? <a href="{% url 'login' %}">Log in</a></p>
+  </div>
+</section>
+{% endblock %}

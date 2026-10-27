@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Log in · SpendWise{% endblock %}
+{% block content %}
+<section class="auth-wrap">
+  <div class="auth-card">
+    <div class="eyebrow">WELCOME BACK</div>
+    <h1>Your money, in focus.</h1>
+    <p class="muted">Log in to see your spending at a glance.</p>
+    <form method="post" class="form-stack">{% csrf_token %}
+      {% if form.errors %}<p class="form-error">Username or password is incorrect. Please try again.</p>{% endif %}
+      <label for="{{ form.username.id_for_label }}">Username</label>{{ form.username }}
+      <label for="{{ form.password.id_for_label }}">Password</label>{{ form.password }}
+      <button class="button primary full" type="submit">Log in</button>
+    </form>
+    <p class="auth-foot">New to SpendWise? <a href="{% url 'signup' %}">Create an account</a></p>
+  </div>
+</section>
+{% endblock %}

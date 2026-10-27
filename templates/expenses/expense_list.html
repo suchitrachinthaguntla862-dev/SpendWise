@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Expenses · SpendWise{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><div class="eyebrow">YOUR RECORDS</div><h1>Expenses</h1><p class="muted">Every little expense adds up. Keep an eye on them.</p></div><a class="button primary" href="{% url 'expense_create' %}">+ Add expense</a></div>
+<section class="panel">
+  <form method="get" class="filter-row"><label for="category">Filter by category</label><select name="category" id="category"><option value="">All categories</option>{% for value,label in categories %}<option value="{{ value }}" {% if selected_category == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select><button class="button secondary" type="submit">Filter</button>{% if selected_category %}<a class="text-link" href="{% url 'expense_list' %}">Clear</a>{% endif %}</form>
+  {% if expenses %}
+  <div class="table-wrap"><table><thead><tr><th>Expense</th><th>Category</th><th>Date</th><th>Amount</th><th>Actions</th></tr></thead><tbody>
+  {% for expense in expenses %}<tr><td><strong>{{ expense.title }}</strong>{% if expense.note %}<small class="table-note">{{ expense.note }}</small>{% endif %}</td><td><span class="pill">{{ expense.category }}</span></td><td>{{ expense.date|date:"M d, Y" }}</td><td class="amount-cell">₹{{ expense.amount|floatformat:2 }}</td><td><div class="action-links"><a href="{% url 'expense_edit' expense.pk %}">Edit</a><a class="delete-link" href="{% url 'expense_delete' expense.pk %}">Delete</a></div></td></tr>{% endfor %}
+  </tbody></table></div>
+  {% else %}<div class="empty-state"><span class="empty-icon">₹</span><h3>No expenses found</h3><p>Add an expense or change the category filter.</p><a href="{% url 'expense_create' %}">Add an expense →</a></div>{% endif %}
+</section>
+{% endblock %}

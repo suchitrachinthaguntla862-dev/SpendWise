@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · SpendWise{% endblock %}
+{% block content %}
+<section class="welcome-row">
+  <div><div class="eyebrow">YOUR MONEY SNAPSHOT</div><h1>Good to see you, {{ user.username }}.</h1><p class="muted">Here’s how your spending is looking.</p></div>
+  <a class="button primary" href="{% url 'expense_create' %}">+ Add expense</a>
+</section>
+<div class="stats-grid">
+  <article class="stat-card accent-card"><div class="stat-label">Spent this month</div><div class="stat-value">₹{{ month_total|floatformat:2 }}</div><div class="stat-note">{{ month_name }}</div></article>
+  <article class="stat-card"><div class="stat-label">All-time spending</div><div class="stat-value">₹{{ all_total|floatformat:2 }}</div><div class="stat-note">Across all your recorded expenses</div></article>
+  <article class="stat-card"><div class="stat-label">Expenses this month</div><div class="stat-value">{{ month_count }}</div><div class="stat-note">Keep tracking to spot patterns</div></article>
+</div>
+<div class="content-grid">
+  <section class="panel"><div class="panel-heading"><div><h2>Spending by category</h2><p class="muted">This month</p></div></div>
+    {% if category_totals %}
+      {% for item in category_totals %}
+      <div class="category-row"><div class="category-name">{{ item.category }}</div><div class="bar-track"><div class="bar-fill" style="width:{% widthratio item.total month_total 100 %}%"></div></div><div class="category-amount">₹{{ item.total|floatformat:2 }}</div></div>
+      {% endfor %}
+    {% else %}<div class="empty-state"><span class="empty-icon">◷</span><h3>No spending yet</h3><p>Add your first expense to see a breakdown here.</p><a href="{% url 'expense_create' %}">Add an expense →</a></div>{% endif %}
+  </section>
+  <section class="panel"><div class="panel-heading"><div><h2>Recent expenses</h2><p class="muted">Your latest entries</p></div><a class="text-link" href="{% url 'expense_list' %}">View all →</a></div>
+    {% if recent_expenses %}
+    <div class="expense-mini-list">{% for expense in recent_expenses %}
+      <div class="expense-mini"><span class="category-dot">{{ expense.category|slice:":1" }}</span><div class="expense-info"><strong>{{ expense.title }}</strong><small>{{ expense.category }} · {{ expense.date|date:"M d" }}</small></div><strong class="expense-price">₹{{ expense.amount|floatformat:2 }}</strong></div>
+    {% endfor %}</div>
+    {% else %}<div class="empty-state"><span class="empty-icon">＋</span><h3>Your first expense starts here</h3><p>Record a purchase, bill, or anything you spend on.</p><a href="{% url 'expense_create' %}">Add an expense →</a></div>{% endif %}
+  </section>
+</div>
+{% endblock %}
